@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16
+    restart: always
+    environment:
+      POSTGRES_DB: blogosfera
+      POSTGRES_USER: symfony
+      POSTGRES_PASSWORD: symfony
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+
+  symfony:
+    build:
+      context: ./symfony
+      dockerfile: Dockerfile
+    container_name: ztpai
+    image: ztpai
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./symfony:/app
+    command: php -S 0.0.0.0:8000 -t public
+    depends_on:
+      - db
